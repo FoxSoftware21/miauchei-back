@@ -249,20 +249,10 @@ return [
                     'url'  => 'pets/found',
                 ],
                 [
-                    'text' => 'Avistados',
-                    'url'  => 'sighted',
+                    'text' => 'Avistamentos',
+                    'url'  => 'avistamentos',
                 ],
             ],
-        ],
-        [
-            'text' => 'Espécies',
-            'url'  => 'species',
-            'icon' => 'fas fa-cat',
-        ],
-        [
-            'text' => 'Raças',
-            'url'  => 'breeds',
-            'icon' => 'fas fa-dog',
         ],
         [
             'text' => 'Status',
