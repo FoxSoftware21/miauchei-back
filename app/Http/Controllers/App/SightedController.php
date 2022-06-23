@@ -123,23 +123,19 @@ class SightedController extends Controller
         $dados = $request->all();
 
         $validator = Validator::make($dados, [
-            'data_sighted' => ['required'],
+            'data_avistamento' => ['required'],
             'pet_id' => ['required'],
-            'last_seen' => ['required'],
-            'user_pet' => ['required'],
+            'ultima_vez_visto' => ['required'],
+            'esta_com_pet' => ['required'],
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->messages()->all()], 400);
         }
 
-        Avistamentos::create([
-            'user_id' => Auth::user()->id,
-            'pet_id' => $dados['pet_id'],
-            'data_avistamento' => $dados['data_sighted'],
-            'ultima_vez_visto' => $dados['last_seen'],
-            'user_pet' => $dados['user_pet']
-        ]);
+        $dados['user_id'] = Auth::user()->id;
+
+        Avistamentos::create([$dados]);
 
         $pet = Pets::findOrFail($dados['pet_id']);
         $pet->status_id = 3;
