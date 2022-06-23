@@ -8,26 +8,26 @@
         <li class="breadcrumb-item active"><a class="breadcrumb-item active" href="{{ route('users.index') }}"
                 class="active">Usuários</a></li>
     </ol>
-    <div style="display: flex; justify-content: space-between">
-        <h1>Usuários</h1>
-        <a href="{{ route('users.create') }}" class="btn btn-dark">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-    </div>
-
+    <h1>Usuários</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('users.search') }}" method="POST" class="form form-inline">
-                @csrf
-                <input type="text" name="filter" placeholder="Pesquisar" class="form-control"
-                    value="{{ $filters['filter'] ?? '' }}">
-                <button type="submit" class="btn btn-dark">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </form>
+            <div style="display: flex; justify-content: space-between">
+                <form action="{{ route('users.search') }}" method="POST" class="form form-inline">
+                    @csrf
+                    <input type="text" name="filter" placeholder="Pesquisar" class="form-control"
+                        value="{{ $filters['filter'] ?? '' }}">
+                    <button type="submit" class="btn btn-dark">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+
+                <a href="{{ route('users.create') }}" class="btn btn-dark">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-condensed">
@@ -43,7 +43,8 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr>
-                            <td><img width="30px" height="30px" src="{{ $user->photo }}" alt="{{ $user->photo }}"></td>
+                            <td><img width="30px" height="30px" src="{{ $user->photo }}" alt="{{ $user->photo }}">
+                            </td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>

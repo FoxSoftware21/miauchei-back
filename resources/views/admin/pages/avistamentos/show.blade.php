@@ -1,12 +1,21 @@
 @extends('adminlte::page')
 
-@section('title', "Avistamentos {$pet->nome}")
+@section('title', "Avistamentos $pet->nome")
 
 @section('content_header')
     <h1>Avistamentos <b>{{ $pet->nome }}</b></h1>
 @stop
 
 @section('content')
+    <style>
+        table th {
+            text-align: center;
+        }
+
+        table td {
+            text-align: center;
+        }
+    </style>
     <div class="card">
         <div class="card-body">
             <table class="table table-condensed">

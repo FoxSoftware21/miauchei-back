@@ -38,7 +38,7 @@ class AvistamentosController extends Controller
             }
         }
 
-        return view('admin.pages.sighted.index', compact('list'));
+        return view('admin.pages.avistamentos.index', compact('list'));
     }
 
     /**
@@ -85,6 +85,6 @@ class AvistamentosController extends Controller
             )
             ->get();
 
-        return view('admin.pages.sighted.show', compact('pet', 'avistamentos'));
+        return view('admin.pages.avistamentos.show', compact('pet', 'avistamentos'));
     }
 }

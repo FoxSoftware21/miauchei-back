@@ -1,4 +1,9 @@
 @extends('adminlte::page')
+<style>
+    th {
+        text-align: center;
+    }
+</style>
 
 @section('title', 'Pets Encontrados')
 
@@ -8,13 +13,19 @@
         <li class="breadcrumb-item active"><a class="breadcrumb-item active" href="{{ route('pets.found.index') }}"
                 class="active">Pets Encontrados</a></li>
     </ol>
-    <div style="display: flex; justify-content: space-between">
-        <h1>Pets Encontrados</h1>
-    </div>
-
+    <h1>Pets Encontrados</h1>
 @stop
 
 @section('content')
+    <style>
+        table th {
+            text-align: center;
+        }
+
+        table td {
+            text-align: center;
+        }
+    </style>
     <div class="card">
         <div class="card-header">
             <form action="{{ route('pets.found.search') }}" method="POST" class="form form-inline">
@@ -38,7 +49,7 @@
                         <th>Tamanho</th>
                         <th>1° Cor</th>
                         <th>Desap.</th>
-                        <th width="270">Ações</th>
+                        <th width="270" style="text-align: center;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,7 +63,7 @@
                             <td>{{ $item->tamanho }}</td>
                             <td>{{ $item->cor_predominante }}</td>
                             <td>{{ date('d/m/Y', strtotime($item->data_desaparecimento)) }}</td>
-                            <td style="width=10px;">
+                            <td style="display: flex; align-items: center; justify-content: space-evenly;">
                                 <a href="{{ route('pets.show', $item->id) }}" class="btn btn-warning" title="VER">
                                     <i class="fa fa-eye"></i>
                                 </a>

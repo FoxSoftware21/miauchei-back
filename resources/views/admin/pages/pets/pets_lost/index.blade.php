@@ -8,25 +8,33 @@
         <li class="breadcrumb-item active"><a class="breadcrumb-item active" href="{{ route('pets.lost.index') }}"
                 class="active">Pets Perdidos</a></li>
     </ol>
-    <div style="display: flex; justify-content: space-between">
-        <h1>Pets Perdidos</h1>
-        <a href="{{ route('pets.lost.create') }}" class="btn btn-dark">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-    </div>
+    <h1>Pets Perdidos</h1>
 @stop
 
 @section('content')
+    <style>
+        table th {
+            text-align: center;
+        }
+        table td {
+            text-align: center;
+        }
+    </style>
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('pets.lost.search') }}" method="POST" class="form form-inline">
-                @csrf
-                <input type="text" name="filter" placeholder="Pesquisar" class="form-control"
-                    value="{{ $filters['filter'] ?? '' }}">
-                <button type="submit" class="btn btn-dark">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </form>
+            <div style="display: flex; justify-content: space-between">
+                <form action="{{ route('pets.lost.search') }}" method="POST" class="form form-inline">
+                    @csrf
+                    <input type="text" name="filter" placeholder="Pesquisar" class="form-control"
+                        value="{{ $filters['filter'] ?? '' }}">
+                    <button type="submit" class="btn btn-dark">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+                <a href="{{ route('pets.lost.create') }}" class="btn btn-dark">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-condensed">
@@ -40,7 +48,7 @@
                         <th>Tamanho</th>
                         <th>1° Cor</th>
                         <th>Desap.</th>
-                        <th width="270">Ações</th>
+                        <th style="text-align: center;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,7 +62,7 @@
                             <td>{{ $item->tamanho }}</td>
                             <td>{{ $item->cor_predominante }}</td>
                             <td>{{ date('d/m/Y', strtotime($item->data_desaparecimento)) }}</td>
-                            <td style="width=10px;">
+                            <td style="display: flex; align-items: center; justify-content: space-evenly;">
                                 <a href="{{ route('pets.show', $item->id) }}" class="btn btn-warning" title="VER">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>
@@ -93,13 +101,14 @@
                         <h5 class="modal-title" id="exampleModalLabel">Pet avistado</h5>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('avistamento.store') }}" method="post">
+                    <form action="{{ route('avistamentos.store') }}" method="post">
                         @csrf
                         <input type="hidden" name="pet_id" class="form-control" value="{{ $item->id }}">
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="last_seen" class="form-label">Última vez visto:</label>
-                                <input type="text" name="ultima_vez_visto" class="form-control" id="last_seen" placeholder="Rua">
+                                <input type="text" name="ultima_vez_visto" class="form-control" id="last_seen"
+                                    placeholder="Rua">
                             </div>
 
                             <div class="mb-3">

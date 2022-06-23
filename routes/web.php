@@ -66,8 +66,8 @@ Route::middleware('auth')->group(function () {
 
       /* Avistamentos */
       Route::prefix('avistamentos')->group(function () {
-        Route::get('', [AvistamentosController::class, 'index'])->name('avistamento.index');
-        Route::post('', [AvistamentosController::class, 'store'])->name('avistamento.store');
-        Route::post('/{id}', [AvistamentosController::class, 'show'])->name('avistamento.show');
+        Route::get('', [AvistamentosController::class, 'index'])->name('avistamentos.index');
+        Route::post('', [AvistamentosController::class, 'store'])->name('avistamentos.store');
+        Route::post('/{id}', [AvistamentosController::class, 'show'])->name('avistamentos.show');
     });
 });

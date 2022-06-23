@@ -227,7 +227,7 @@ return [
     'menu' => [
         // Sidebar items:
         [
-            'text' => 'Home',
+            'text' => 'Dashboard',
             'url'  => 'home',
             'icon' => 'fas fa-tachometer-alt',
         ],

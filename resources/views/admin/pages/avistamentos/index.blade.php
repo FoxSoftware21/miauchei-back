@@ -5,16 +5,22 @@
 @section('content_header')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('home.index') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active"><a class="breadcrumb-item active" href="{{ route('avistamento.index') }}"
+        <li class="breadcrumb-item active"><a class="breadcrumb-item active" href="{{ route('avistamentos.index') }}"
                 class="active">Avistamentos</a></li>
     </ol>
-    <div style="display: flex; justify-content: space-between">
-        <h1>Avistamentos</h1>
-    </div>
-
+    <h1>Avistamentos</h1>
 @stop
 
 @section('content')
+    <style>
+        table th {
+            text-align: center;
+        }
+
+        table td {
+            text-align: center;
+        }
+    </style>
     <div class="card">
         <div class="card-header">
         </div>
@@ -46,8 +52,8 @@
                             @else
                                 <td class="text-success">{{ $item->status }}</td>
                             @endif
-                            <td style="width=10px;">
-                                <form action="{{ route('avistamento.show', $item->id) }}" method="post">
+                            <td style="display: flex; align-items: center; justify-content: space-evenly;">
+                                <form action="{{ route('avistamentos.show', $item->id) }}" method="post">
                                     @csrf
                                     <button type="submit" class="btn btn-primary" title="AVISTAMENTOS">
                                         {{ $item->count }} <i class="fa fa-arrow-right" aria-hidden="true"></i>

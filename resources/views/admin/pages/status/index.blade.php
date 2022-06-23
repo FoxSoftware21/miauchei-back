@@ -8,26 +8,33 @@
         <li class="breadcrumb-item active"><a class="breadcrumb-item active" href="{{ route('status.index') }}"
                 class="active">Status</a></li>
     </ol>
-    <div style="display: flex; justify-content: space-between">
-        <h1>Status</h1>
-        <a href="{{ route('status.create') }}" class="btn btn-dark">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-        </a>
-    </div>
-
+    <h1>Status</h1>
 @stop
 
 @section('content')
+<style>
+    table th {
+        text-align: center;
+    }
+    table td {
+        text-align: center;
+    }
+</style>
     <div class="card">
         <div class="card-header">
-            <form action="{{ route('status.search') }}" method="POST" class="form form-inline">
-                @csrf
-                <input type="text" name="filter" placeholder="Pesquisar" class="form-control"
-                    value="{{ $filters['filter'] ?? '' }}">
-                <button type="submit" class="btn btn-dark">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-            </form>
+            <div style="display: flex; justify-content: space-between">
+                <form action="{{ route('status.search') }}" method="POST" class="form form-inline">
+                    @csrf
+                    <input type="text" name="filter" placeholder="Pesquisar" class="form-control"
+                        value="{{ $filters['filter'] ?? '' }}">
+                    <button type="submit" class="btn btn-dark">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </button>
+                </form>
+                <a href="{{ route('status.create') }}" class="btn btn-dark">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
         </div>
         <div class="card-body">
             <table class="table table-condensed">
@@ -43,7 +50,7 @@
                         <tr>
                             <td>{{ $item->id }}</td>
                             <td>{{ $item->name }}</td>
-                            <td style="width=10px;">
+                            <td style="display: flex; align-items: center; justify-content: space-evenly;">
                                 <a href="{{ route('status.show', $item->id) }}" class="btn btn-warning" title="VER">
                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                 </a>
