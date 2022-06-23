@@ -85,7 +85,7 @@ class PetsController extends Controller
         for ($i = 0; $i < count($myPets); $i++) {
             $result[$i]['id']                   = $myPets[$i]['id'];
             $result[$i]['nome']                 = $myPets[$i]['nome'];
-            $result[$i]['data_desaparecimento'] = date_create($myPets[$i]->data_desaparecimento)->format('d/m/Y');
+            $result[$i]['data_desaparecimento'] = $myPets[$i]['data_desaparecimento'];
             $result[$i]['foto']                 = $myPets[$i]['foto'];
             $result[$i]['status']               = $myPets[$i]['status'];
         }
@@ -207,13 +207,10 @@ class PetsController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
-        
+
         $dados['foto'] = UploadFileS3::upload($request, 3);
         $dados['user_id'] = Auth::user()->id;
         $dados['status_id'] = 1;
-        
-        
-        // dd($dados);
 
         $pet = Pets::create($dados);
 
