@@ -130,12 +130,13 @@ class SightedController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()->all()], 400);
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
         $dados['user_id'] = Auth::user()->id;
+        $dados['esta_com_pet'] = intval($dados['esta_com_pet']);
 
-        Avistamentos::create([$dados]);
+        Avistamentos::create($dados);
 
         $pet = Pets::findOrFail($dados['pet_id']);
         $pet->status_id = 3;
