@@ -7,6 +7,7 @@ use App\Helpers\UploadFileS3;
 use App\Http\Controllers\Controller;
 use App\Models\Avistamentos;
 use App\Models\Pets;
+use App\Models\Status;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class PetsController extends Controller
             ->get();
 
         for ($i = 0; $i < count($recentPets); $i++) {
-            $recentPets[$i]->sighted = Avistamentos::select('ultima_vez_visto', 'data_avistamento')
+            $recentPets[$i]->avistamentos = Avistamentos::select('ultima_vez_visto', 'data_avistamento')
                 ->where('pet_id', $recentPets[$i]->id)
                 ->orderBy('created_at', 'DESC')
                 ->first();
@@ -112,7 +113,7 @@ class PetsController extends Controller
             ->get();
 
         for ($i = 0; $i < count($petsLost); $i++) {
-            $petsLost[$i]->sighted = Avistamentos::select('ultima_vez_visto', 'data_avistamento')
+            $petsLost[$i]->avistamentos = Avistamentos::select('ultima_vez_visto', 'data_avistamento')
                 ->where('pet_id', $petsLost[$i]->id)->latest()->first();
             $petsLost[$i]->times = $this->dates_differents->dateFormat($petsLost[$i]->created_at);
         }
@@ -150,10 +151,8 @@ class PetsController extends Controller
         $dateFormat = date_create($pets->data_desaparecimento);
 
         $pets->data_desaparecimento = date_format($dateFormat, 'd/m/Y');
-        $pets->sighted = Avistamentos::select('ultima_vez_visto', 'data_avistamento', 'user_pet')
-            ->where('pet_id', $pets->id)
-            ->orderBy('created_at', 'DESC')
-            ->first();
+        $pets->avistamentos = Avistamentos::select('*')->where('pet_id', $pets->id)->orderBy('created_at', 'DESC')->first();
+        $pets->status = Status::select('*')->where('id', $pets->status_id)->first();
         $pets->times = $this->dates_differents->dateFormat($pets->created_at);
         $pets->user = Auth::user();
 
@@ -224,12 +223,12 @@ class PetsController extends Controller
 
         $pet->save();
 
-        $sighted = new Avistamentos();
-        $sighted->ultima_vez_visto = $dados['last_seen'];
-        $sighted->data_avistamento = $dados['date_disappearance'];
-        $sighted->user_id = Auth::user()->id;
+        $avistamentos = new Avistamentos();
+        $avistamentos->ultima_vez_visto = $dados['last_seen'];
+        $avistamentos->data_avistamento = $dados['date_disappearance'];
+        $avistamentos->user_id = Auth::user()->id;
 
-        $pet->sighted()->save($sighted);
+        $pet->avistamentos()->save($avistamentos);
 
         return response()->json(['success' => 'Cadastro efetuado com sucesso!']);
     }

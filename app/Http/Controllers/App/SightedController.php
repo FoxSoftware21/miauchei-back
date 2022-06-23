@@ -23,7 +23,7 @@ class SightedController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/pets-sighted",
+     *      path="/pets-avistamentos",
      *      summary="Pets avistados",
      *      description="Retorna lista de pets avistados",
      *      security={{"bearerAuth": {}}},
@@ -99,7 +99,7 @@ class SightedController extends Controller
     /**
      * @OA\Post(
      *      tags={"Pets"},
-     *      path="/pets-sighted-store",
+     *      path="/pets-avistamentos-store",
      *      summary="Cadastrar avistamentos",
      *      description="Retorna dados do avistamento",
      *      security={{"bearerAuth": {}}},
