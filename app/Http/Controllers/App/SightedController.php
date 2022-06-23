@@ -82,14 +82,14 @@ class SightedController extends Controller
         $pet = Pets::select('pets.*')->where('pets.id', $id)->get();
 
         for ($i = 0; $i < count($pet); $i++) {
-            $dateFormat = date_create($pet[$i]->data_desaparecimento);
-            $pet[$i]->publicado = date_format($dateFormat, 'd/m/Y');
+            $pet[$i]->publicado = $pet[$i]->data_desaparecimento;
+
             $pet[$i]->avistamentos = Avistamentos::join('users', 'avistamentos.user_id', '=', 'users.id')
                 ->select('avistamentos.*', 'users.name as dono')->where('avistamentos.pet_id', $pet[$i]->id)->get();
 
             for ($y = 0; $y < count($pet[$i]->avistamentos); $y++) {
                 $dateFormat = date_create($pet[$i]->avistamentos[$y]->data_avistamento);
-                $pet[$i]->avistamentos[$y]['data_perdido'] = date_format($dateFormat, 'd/m/Y');
+                $pet[$i]->avistamentos[$y]['data_perdido'] = $pet[$i]->data_desaparecimento;
             }
         }
 
