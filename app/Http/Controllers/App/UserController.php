@@ -69,10 +69,26 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail(Auth::user()->id);
+        
+        $new_photo = explode(':', $dados['photo']);
 
-        $dados['photo'] = UploadFileS3::upload($request, 4);
+        if (isset($dados['photo']) && $new_photo[0] != 'https') {
+            $data = explode(',', $dados['photo']);
+            $folder = 'users/';
+            $name = $folder .Str::uuid() . '.jpg';
+            Storage::disk('s3')->put($name, base64_decode($data[0]));
+            $url = Storage::disk('s3')->url($name);
+            $dados['photo'] = $url;
 
-        $user->update($dados);
+            $user->update($dados);
+        } else {
+            $user->update([
+                'name' => $dados['name'],
+                'email' => $dados['email'],
+                'phone' => $dados['phone'],
+                'photo' => $user->photo
+            ]);
+        }
 
         return response()->json(['success' => 'Usuário atualizado com sucesso!']);
     }
