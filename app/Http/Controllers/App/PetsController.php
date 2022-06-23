@@ -148,9 +148,6 @@ class PetsController extends Controller
     {
         $pets = Pets::findOrFail($id);
 
-        $dateFormat = date_create($pets->data_desaparecimento);
-
-        $pets->data_desaparecimento = date_format($dateFormat, 'd/m/Y');
         $pets->avistamentos = Avistamentos::select('*')->where('pet_id', $pets->id)->orderBy('created_at', 'DESC')->first();
         $pets->status = Status::select('*')->where('id', $pets->status_id)->first();
         $pets->times = $this->dates_differents->dateFormat($pets->created_at);
