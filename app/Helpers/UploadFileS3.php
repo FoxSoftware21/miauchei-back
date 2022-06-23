@@ -34,6 +34,20 @@ class UploadFileS3
                     $url = $s3->url($name);
                 }
                 break;
+            case 3:
+                $folder = 'pets/';
+                $data = explode(',', $request['photo']);
+                $name = $folder . Str::uuid() . '.jpg';
+                $s3->put($name, base64_decode($data[0]));
+                $url = $s3->url($name);
+                break;
+            case 4:
+                $data = explode(',', $request['photo']);
+                $folder = 'users/';
+                $name = $folder . Str::uuid() . '.jpg';
+                $s3->put($name, base64_decode($data[0]));
+                $url = $s3->url($name);
+                break;
             default:
         }
 
