@@ -83,11 +83,11 @@ class PetsController extends Controller
 
         $result = [];
         for ($i = 0; $i < count($myPets); $i++) {
-            $result[$i]['id']                 = $myPets[$i]['id'];
-            $result[$i]['name']               = $myPets[$i]['nome'];
-            $result[$i]['date_disappearance'] = $myPets[$i]['data_desaparecimento'];
-            $result[$i]['photo']              = $myPets[$i]['foto'];
-            $result[$i]['status']             = $myPets[$i]['status'];
+            $result[$i]['id']                   = $myPets[$i]['id'];
+            $result[$i]['nome']                 = $myPets[$i]['nome'];
+            $result[$i]['data_desaparecimento'] = date_create($myPets[$i]->data_desaparecimento)->format('d/m/Y');
+            $result[$i]['foto']                 = $myPets[$i]['foto'];
+            $result[$i]['status']               = $myPets[$i]['status'];
         }
 
         return response()->json($result);
@@ -193,42 +193,33 @@ class PetsController extends Controller
         $dados = $request->all();
 
         $validator = Validator::make($dados, [
-            'name' => ['required'],
-            'sex' => ['required'],
-            'photo' => ['required'],
-            'species' => ['required'],
-            'breed' => ['required'],
-            'size' => ['required'],
-            'predominant_color' => ['required'],
-            'date_disappearance' => ['required'],
-            'last_seen' => ['required'],
+            'nome' => ['required'],
+            'sexo' => ['required'],
+            'foto' => ['required'],
+            'especie' => ['required'],
+            'raca' => ['required'],
+            'tamanho' => ['required'],
+            'cor_predominante' => ['required'],
+            'data_desaparecimento' => ['required'],
+            'ultima_vez_visto' => ['required'],
         ]);
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->messages()->all()], 400);
         }
 
-        $pet = new Pets();
-        $pet->nome = $dados['name'];
-        $pet->especie = $dados['species'];
-        $pet->sexo = $dados['sex'];
-        $pet->raca = $dados['breed'];
-        $pet->tamanho = $dados['size'];
-        $pet->cor_predominante = $dados['predominant_color'];
-        $pet->detalhes_fisicos = $dados['physical_details'] ?? null;
-        $pet->data_desaparecimento = $dados['date_disappearance'];
-        $pet->foto = UploadFileS3::upload($request, 3);
-        $pet->user_id = Auth::user()->id;
-        $pet->status_id = 1;
+        $dados['photo'] = UploadFileS3::upload($request, 3);
+        $dados['user_id'] = Auth::user()->id;
+        $dados['status_id'] = 1;
 
-        $pet->save();
+        $pet = Pets::create($dados);
 
-        $avistamentos = new Avistamentos();
-        $avistamentos->ultima_vez_visto = $dados['last_seen'];
-        $avistamentos->data_avistamento = $dados['date_disappearance'];
-        $avistamentos->user_id = Auth::user()->id;
-
-        $pet->avistamentos()->save($avistamentos);
+        $pet->avistamentos()->create([
+            'ultima_vez_visto' => $dados['ultima_vez_visto'],
+            'data_avistamento' => $dados['data_desaparecimento'],
+            'esta_com_pet' => 0,
+            'user_id' => Auth::user()->id,
+        ]);
 
         return response()->json(['success' => 'Cadastro efetuado com sucesso!']);
     }
