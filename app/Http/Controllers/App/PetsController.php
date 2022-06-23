@@ -207,10 +207,13 @@ class PetsController extends Controller
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 400);
         }
-
+        
         $dados['foto'] = UploadFileS3::upload($request, 3);
         $dados['user_id'] = Auth::user()->id;
         $dados['status_id'] = 1;
+        
+        
+        // dd($dados);
 
         $pet = Pets::create($dados);
 
