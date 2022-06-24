@@ -14,7 +14,7 @@ class RegisterController extends Controller
     /**
      * @OA\Post(
      *      tags={"Auth"},
-     *      path="/register",
+     *      path="/auth/register",
      *      summary="Cadastro de Usuários",
      *      description="Cadastro de usuários",
      *    @OA\Parameter(
@@ -80,7 +80,6 @@ class RegisterController extends Controller
         $dados['password'] = Hash::make($dados['password']);
 
         return response()->json([
-            'status' => true,
             'message' => 'Cadastro efetuado com sucesso!',
             'user' => User::create($dados)
         ]);

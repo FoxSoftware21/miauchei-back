@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Avistamentos;
 use App\Models\Pets;
 use App\Models\Status;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class PetsController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/recents",
+     *      path="/pets/recents",
      *      summary="Pets recente",
      *      description="Retorno de pets cadastrados recentemente",
      *      security={{"bearerAuth": {}}},
@@ -63,7 +64,7 @@ class PetsController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/mypets",
+     *      path="/pets/my",
      *      summary="Meus Pets",
      *      description="Retorno dos pets cadastrados pelo usuário logado",
      *      security={{"bearerAuth": {}}},
@@ -96,7 +97,7 @@ class PetsController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/pets-lost",
+     *      path="/pets/lost",
      *      summary="Pets perdidos",
      *      description="Retorna lista de pets perdidos",
      *      security={{"bearerAuth": {}}},
@@ -128,7 +129,7 @@ class PetsController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/pets-details/{id}",
+     *      path="/pets/details/{id}",
      *      summary="Detalhes do pet",
      *      description="Retorna detalhes do pet conforme id passado",
      *      security={{"bearerAuth": {}}},
@@ -148,9 +149,16 @@ class PetsController extends Controller
     {
         $pets = Pets::findOrFail($id);
 
-        $pets->avistamentos = Avistamentos::select('*')->where('pet_id', $pets->id)->orderBy('created_at', 'DESC')->first();
+        $pets->avistamentos = Avistamentos::select('*')
+            ->where('pet_id', $pets->id)
+            ->orderBy('created_at', 'DESC')
+            ->first();
+
+        $pets->avistamentos->user = User::findOrFail($pets->avistamentos->user_id);
+
         $pets->status = Status::select('*')->where('id', $pets->status_id)->first();
         $pets->times = $this->dates_differents->dateFormat($pets->created_at);
+
         $pets->user = Auth::user();
 
         return response()->json($pets);
@@ -159,7 +167,7 @@ class PetsController extends Controller
     /**
      * @OA\Post(
      *      tags={"Pets"},
-     *      path="/pets-store",
+     *      path="/pets/store",
      *      summary="Cadastrar pet",
      *      description="Retorna dados do pet",
      *      security={{"bearerAuth": {}}},

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\App;
 
-use App\Helpers\UploadFileS3;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +16,7 @@ class UserController extends Controller
     /**
      * @OA\Get(
      *      tags={"Usuário"},
-     *      path="/profile",
+     *      path="/users/profile",
      *      summary="Perfil do Usuário",
      *      description="Retorno do perfil do Usuário",
      *      security={{"bearerAuth": {}}},
@@ -36,7 +35,7 @@ class UserController extends Controller
     /**
      * @OA\Post(
      *      tags={"Usuário"},
-     *      path="/profile",
+     *      path="/users/profile",
      *      summary="Atualização do Perfil",
      *      description="Retorna dados atualizados",
      *      @OA\RequestBody(@OA\MediaType(mediaType="application/json",
@@ -65,17 +64,17 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->messages()->all()], 400);
+            return response()->json(['message' => $validator->errors()], 400);
         }
 
         $user = User::findOrFail(Auth::user()->id);
-        
+
         $new_photo = explode(':', $dados['photo']);
 
         if (isset($dados['photo']) && $new_photo[0] != 'https') {
             $data = explode(',', $dados['photo']);
             $folder = 'users/';
-            $name = $folder .Str::uuid() . '.jpg';
+            $name = $folder . Str::uuid() . '.jpg';
             Storage::disk('s3')->put($name, base64_decode($data[0]));
             $url = Storage::disk('s3')->url($name);
             $dados['photo'] = $url;

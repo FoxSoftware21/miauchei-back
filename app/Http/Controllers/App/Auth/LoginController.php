@@ -6,14 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
     /**
      * @OA\Post(
      *      tags={"Auth"},
-     *      path="/login",
+     *      path="/auth/login",
      *      summary="Login de Usuário",
      *      description="Retorna usuário logado",
      *      @OA\RequestBody(
@@ -29,7 +28,6 @@ class LoginController extends Controller
      *     @OA\Response(response=200, description="Successful operation"),
      *     @OA\Response(response=400, description="Bad Request"),
      * )
-     * @throws ValidationException
      */
     public function login(Request $request)
     {
@@ -52,7 +50,6 @@ class LoginController extends Controller
         $token = auth()->user()->createToken($request->get('device_name'));
 
         $response = [
-            'status' => true,
             'authorization' => $token->plainTextToken,
             'success' => 'Login efetuado com sucesso!',
             'user' => Auth::user()

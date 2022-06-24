@@ -13,7 +13,7 @@ class FoundController extends Controller
     /**
      * @OA\Put(
      *      tags={"Pets"},
-     *      path="/pet-found/{id}",
+     *      path="/pets-encontrados/{id}",
      *      summary="Pet encontrado",
      *      description="Atualização do pet para encontrado",
      *      security={{"bearerAuth": {}}},
@@ -29,11 +29,11 @@ class FoundController extends Controller
      *      @OA\Response(response=400, description="Bad Request"),
      * )
      */
-    public function petFound($id): JsonResponse
+    public function petsEncontrados($id): JsonResponse
     {
         $pet = Pets::findOrFail($id);
         $pet->status_id = 2;
-        $pet->data_desaparecimento = Carbon::now()->format('Y-m-d');
+        $pet->data_desaparecimento = Carbon::now()->format('d/m/Y');
         $pet->save();
 
         return response()->json(['success' => 'Atualização efetuada com sucesso!']);

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class SightedController extends Controller
+class AvistamentosController extends Controller
 {
     private $dates_differents;
 
@@ -23,7 +23,7 @@ class SightedController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/pets-avistamentos",
+     *      path="/pets/avistados",
      *      summary="Pets avistados",
      *      description="Retorna lista de pets avistados",
      *      security={{"bearerAuth": {}}},
@@ -32,7 +32,7 @@ class SightedController extends Controller
      *      @OA\Response(response=400,description="Bad Request"),
      * )
      */
-    public function petsSighted(): JsonResponse
+    public function petsAvistados(): JsonResponse
     {
         $petsSighted = Pets::join('users', 'pets.user_id', '=', 'users.id')
             ->join('status', 'pets.status_id', '=', 'status.id')
@@ -61,7 +61,7 @@ class SightedController extends Controller
     /**
      * @OA\Get(
      *      tags={"Pets"},
-     *      path="/pet-sightings/{id}",
+     *      path="/pets/avistamentos/{id}",
      *      summary="Avistamentos do pet",
      *      description="Retorna os avistamentos do pet conforme id passado",
      *      security={{"bearerAuth": {}}},
@@ -77,7 +77,7 @@ class SightedController extends Controller
      *     @OA\Response(response=400, description="Bad Request"),
      * )
      */
-    public function petSightings(int $id): JsonResponse
+    public function petsAvistamentos(int $id): JsonResponse
     {
         $pet = Pets::select('pets.*')->where('pets.id', $id)->get();
 
@@ -88,7 +88,6 @@ class SightedController extends Controller
                 ->select('avistamentos.*', 'users.name as dono')->where('avistamentos.pet_id', $pet[$i]->id)->get();
 
             for ($y = 0; $y < count($pet[$i]->avistamentos); $y++) {
-                $dateFormat = date_create($pet[$i]->avistamentos[$y]->data_avistamento);
                 $pet[$i]->avistamentos[$y]['data_perdido'] = $pet[$i]->data_desaparecimento;
             }
         }
@@ -99,18 +98,18 @@ class SightedController extends Controller
     /**
      * @OA\Post(
      *      tags={"Pets"},
-     *      path="/pets-avistamentos-store",
+     *      path="/pets/avistamentos/store",
      *      summary="Cadastrar avistamentos",
      *      description="Retorna dados do avistamento",
      *      security={{"bearerAuth": {}}},
      *      @OA\RequestBody(
      *         @OA\MediaType(mediaType="application/json",
      *             @OA\Schema(
-     *                 @OA\Property(property="data_sighted", type="string"),
+     *                 @OA\Property(property="data_avistamento", type="string"),
      *                 @OA\Property(property="pet_id", type="string"),
-     *                 @OA\Property(property="last_seen", type="string"),
-     *                 @OA\Property(property="user_pet", type="boolean"),
-     *                 example={"data_sighted": "05/04/2022", "pet_id": "345", "last_seen": "Rua teste", "user_pet": true}
+     *                 @OA\Property(property="ultima_vez_visto", type="string"),
+     *                 @OA\Property(property="esta_com_pet", type="string"),
+     *                 example={"data_avistamento": "05/04/2022", "pet_id": "345", "ultima_vez_visto": "Rua teste", "esta_com_pet": "0"}
      *             )
      *         )
      *     ),
@@ -118,7 +117,7 @@ class SightedController extends Controller
      *     @OA\Response(response=400, description="Bad Request"),
      * )
      */
-    public function petsSightedStore(Request $request): JsonResponse
+    public function petsAvistamentosStore(Request $request): JsonResponse
     {
         $dados = $request->all();
 
