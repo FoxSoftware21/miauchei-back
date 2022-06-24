@@ -70,7 +70,6 @@ class RegisterController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required',
             'phone' => 'required',
-            'super' => 'required',
         ]);
 
         if ($validator->fails()) {
