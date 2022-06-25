@@ -156,10 +156,11 @@ class PetsController extends Controller
 
         $pets->avistamentos->user = User::findOrFail($pets->avistamentos->user_id);
 
-        $pets->status = Status::select('*')->where('id', $pets->status_id)->first();
-        $pets->times = $this->dates_differents->dateFormat($pets->created_at);
+        $pets->status = Status::findOrFail($pets->status_id);
+        
+        $pets->user = User::findOrFail($pets->user_id);
 
-        $pets->user = Auth::user();
+        $pets->times = $this->dates_differents->dateFormat($pets->created_at);
 
         return response()->json($pets);
     }
